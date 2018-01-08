@@ -127,7 +127,7 @@ By using a `Sliding window` approach, where I identified all the 'white' pixels 
 
 ![alt text][polynomials]
 
-If the results from the previous frame were good, then the data are reused to calculate the polynomials in the next frame. The function `skip_sliding(...)` in code cell no. 18 is used for this purpose.
+If the results from the previous frame are good, then the data are reused to calculate the polynomials in the next frame. The function `skip_sliding(...)` in code cell no. 18 is used for this purpose.
 The switch between using `slide_windows(...)` and `skip_sliding(...)` takes place in the central function `process_one_image(...)` in code cell no. 28, where the purpose is to recalculate the lines, if the previous result are bad. I use a `Class Line()` to hold different parameters for each of the two lines, as this is far easier to handle than using an `global vars` approach (see code cell no. 25).
 
 
@@ -165,4 +165,9 @@ Here's a [link to my video result](./output_images/project_video_w_lanes.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+The pipeline works okay for the project_video.mp4, but when trying to run the two more 'advanced' videos throughout the code, it fails.
+I find this a little intriguing and if I had the time to pursue the problems, I would start off with the objectives. The first will be to create a database to hold all the params for each frame and the second would be to create small images of e.g. threshold on different colors and insert them into the frame. I could think of having all the available values printed in the top right of the image and all small images (5x5 or more) in the top left corner. Then it would be possible to asses all inputs to the lane creation functions per frame and I think it would where I would start. As for more robust code, the pipeline itself ought to be written as a Class. This way several instances could run simultaneously and perhaps provide important information, when the e.g. the lights in the frames changes quickly.
+
+All in all, it has been a very exciting project and I wish I had more time to dive deeper into the image processing functions so vital to self-driving cars.
+
+Kind regards, Claus H. Rasmussen
