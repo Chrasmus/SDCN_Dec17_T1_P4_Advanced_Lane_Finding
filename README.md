@@ -34,7 +34,7 @@ The goals / steps of this project are the following:
 [cal3]: ./output_images/cal_images/calibration3.jpg "Calibration image no.3"
 [dist_testimage2]: ./test_images/test2.jpg "Original, distorted Test image no. 2"
 [undist_testimage2]: ./output_images/cal_images/test2_undistorted.jpg "Undistorted Test image no. 2"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
+[combined_binary_testimage2]: ./output_images/test2_combined_thresh.jpg "Binary Example"
 [image4]: ./examples/warped_straight_lines.jpg "Warp Example"
 [image5]: ./examples/color_fit_lines.jpg "Fit Visual"
 [image6]: ./examples/example_output.jpg "Output"
@@ -80,15 +80,18 @@ This is an example of the resulting image:
 To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
 ![alt text][dist_testimage2]
 
-The undistorted image looks like this:
+First the camera calibration parameters are calculated using opencv's `calibrateCamera(...)` function (code cell no. 5).
+Next, these params are given to opencv's `undistort(...)` function (code cell no. 6).
+This is demonstrated in code cell no. 8, and the undistorted image ends up looking like this:
 ![alt text][undist_testimage2]
 
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+I used a combination of color and gradient thresholds to generate a binary image, where I use the S-channel from a HLS version of the image, bombined with a Sobel gradient in the x direction in order to accentuate lines away from horizontal. The code is located in code cell no. 11.
+Here's an example of my output for this step:
+![alt text][combined_binary_testimage2]
 
-![alt text][image3]
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
