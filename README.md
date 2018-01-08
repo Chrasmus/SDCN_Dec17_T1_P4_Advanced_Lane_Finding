@@ -36,7 +36,7 @@ The goals / steps of this project are the following:
 [undist_testimage2]: ./output_images/cal_images/test2_undistorted.jpg "Undistorted Test image no. 2"
 [combined_binary_testimage2]: ./output_images/test2_combined_thresh.png "Binary Example"
 [source_lines_image]: ./output_images/straight_lines1_undistorted.jpg "Undistorted image with Source points"
-[warped_lines_image]: ./output_images/straight_lines1_warped.png "Warp Example"
+[warped_lines_image]: ./output_images/straight_lines1_warped.jpg "Warp Example"
 [histogram]: ./output_images/test3_histogram.jpg "Histogram"
 [image6]: ./examples/example_output.jpg "Output"
 [video1]: ./project_video.mp4 "Video"
@@ -122,6 +122,7 @@ To identify the lane pixels, I used a histogram on the lower half of the image u
 Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
 
 ![alt text][histogram]
+
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
