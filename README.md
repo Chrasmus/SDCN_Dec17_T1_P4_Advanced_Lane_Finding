@@ -37,9 +37,9 @@ The goals / steps of this project are the following:
 [combined_binary_testimage2]: ./output_images/test2_combined_thresh.png "Binary Example"
 [source_lines_image]: ./output_images/straight_lines1_undistorted.jpg "Undistorted image with Source points"
 [warped_lines_image]: ./output_images/straight_lines1_warped.jpg "Warp Example"
-[histogram]: ./output_images/test3_histogram.jpg "Histogram"
-[image6]: ./examples/example_output.jpg "Output"
-[video1]: ./project_video.mp4 "Video"
+[histogram]: ./output_images/test3_histogram.png "Histogram"
+[polynomials]: ./output_images/sliding_windows_test3.png "Output"
+[video1]: ./output_images/project_video_w_lanes.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
@@ -118,10 +118,13 @@ I verified that my perspective transform was working as expected by drawing the 
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-To identify the lane pixels, I used a histogram on the lower half of the image using `np.sum(...)`, see testing in code cell no. 17 and actual implementation in the pipeline in my function `slide_windows(...)` in code cell no. 18.
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+To identify the lane pixels, I used a histogram on the lower half of the image using `np.sum(...)`, see testing in code cell no. 17 and actual implementation in the pipeline in my function `slide_windows(...)` in code cell no. 18. The lanes are where the two spikes are.
 
 ![alt text][histogram]
+
+By using a `Sliding window` approach, where I identified all the 'white' pixels in the binary in 9 windows, moving/sliding up from the bottom to the top of the image, two arrays of x,y for the left and the right line were obtained. These coordinates were used in the `np.polyfit(...)` function and two second order polynomials were returned. Her the polynomials are drawed on the warped image together with pixels used and the bounding box of the nine sliding windows:
+
+![alt text][polynomials]
 
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
@@ -139,6 +142,8 @@ I implemented this step in lines # through # in my code in `yet_another_file.py`
 ### Pipeline (video)
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+
+![alt test][video1]
 
 Here's a [link to my video result](./project_video.mp4)
 
