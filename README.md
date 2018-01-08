@@ -39,6 +39,7 @@ The goals / steps of this project are the following:
 [warped_lines_image]: ./output_images/straight_lines1_warped.jpg "Warp Example"
 [histogram]: ./output_images/test3_histogram.png "Histogram"
 [polynomials]: ./output_images/sliding_windows_test3.png "Output"
+[with_lane]: ./output_images/test3_w_lane.png "Output"
 [video1]: ./output_images/project_video_w_lanes.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
@@ -91,14 +92,14 @@ This is demonstrated in code cell no. 8, and the undistorted image ends up looki
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
 I used a combination of color and gradient thresholds to generate a binary image, where I use the S-channel from a HLS version of the image, combined with a Sobel gradient threshold in the x direction in order to accentuate lines away from horizontal. The code is located in code cell no. 11.
-Here's an example of my output for this step:
+Here's an example of my output for this step on an original, distorted image:
 
 ![alt text][combined_binary_testimage2]
 
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `warp(...)`, which appears in code cell no. 14 of the IPython notebook.  The `warp(...)` function takes as inputs an image (`img`). It contains the warping parameters (hardcoded) *source* (`src`) and *destination* (`dst`) points.  I chose the hardcode the source and destination points by eye balling them in a test image (`straight_lines1.jpg`). This resulted in the following source and destination points:
+The code for my perspective transform includes a function called `warp(...)`, which appears in code cell no. 14 of the IPython notebook.  The `warp(...)` function takes an image as input. It contains the warping parameters (hardcoded) *source* (`src`) and *destination* (`dst`) points.  I chose the hardcode the source and destination points by eye balling them in a test image (`straight_lines1.jpg`). This resulted in the following source and destination points:
 
 | Source        | Destination   |
 |:-------------:|:-------------:|
@@ -126,16 +127,27 @@ By using a `Sliding window` approach, where I identified all the 'white' pixels 
 
 ![alt text][polynomials]
 
+If the results from the previous frame were good, then the data are reused to calculate the polynomials in the next frame. The function `skip_sliding(...)` in code cell no. 18 is used for this purpose.
+The switch between using `slide_windows(...)` and `skip_sliding(...)` takes place in the central function `process_one_image(...)` in code cell no. 28, where the purpose is to recalculate the lines, if the previous result are bad. I use a `Class Line()` to hold different parameters for each of the two lines, as this is far easier to handle than using an `global vars` approach (see code cell no. 25).
+
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+The curvature is based on the assumption that x and y can be converted to meters. These conversion factors were obtained manually and are therefore error prone. The number describing the curvature in the video is the mean of the left curvature and the right curvature. And it it not very good, but in scale though. the same x conversion values is also used in the calculation of the position of the lane center.
+The assumption used about x and y are:
+* ym_per_pix = 3/140     # meters per pixel in y dimension
+* xm_per_pix = 3.7/650   # meters per pixel in x dimension
+
+The curvature is calculated in the function `curvature(...)` in code cell no. 18.
+The position relative to the center of the lane is calculated in line 22-26 in the function `process_one_image(...)` (see code cell no. 28).
+
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+I implemented this step in the Jupyter Notebook in function `draw_on_image(...)` in code cell 27. This function is called from `process_one_image(...)` in code cell no. 28.
+Here is an example of my result on a test image (using test image no. 3):
 
-![alt text][image6]
+![alt text][with_lane]
 
 ---
 
@@ -143,9 +155,9 @@ I implemented this step in lines # through # in my code in `yet_another_file.py`
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-![alt test][video1]
+The code that creates the video with the imposed lanes and information about curvature and position regarding the center of the lane, can be found in code cell no. 31, at the end of the Jupyter Notebook. The pipeline is based on the function `process_one_image(...)` in code cell no. 28.
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](./output_images/project_video_w_lanes.mp4)
 
 ---
 
