@@ -35,8 +35,9 @@ The goals / steps of this project are the following:
 [dist_testimage2]: ./test_images/test2.jpg "Original, distorted Test image no. 2"
 [undist_testimage2]: ./output_images/cal_images/test2_undistorted.jpg "Undistorted Test image no. 2"
 [combined_binary_testimage2]: ./output_images/test2_combined_thresh.png "Binary Example"
+[source_lines_image]: ./output_images/straight_lines1_undistorted.jpg "Undistorted image with Source points"
 [warped_lines_image]: ./output_images/straight_lines1_warped.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
+[histogram]: ./output_images/test3_histogram.jpg "Histogram"
 [image6]: ./examples/example_output.jpg "Output"
 [video1]: ./project_video.mp4 "Video"
 
@@ -89,7 +90,7 @@ This is demonstrated in code cell no. 8, and the undistorted image ends up looki
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image, where I use the S-channel from a HLS version of the image, bombined with a Sobel gradient in the x direction in order to accentuate lines away from horizontal. The code is located in code cell no. 11.
+I used a combination of color and gradient thresholds to generate a binary image, where I use the S-channel from a HLS version of the image, combined with a Sobel gradient threshold in the x direction in order to accentuate lines away from horizontal. The code is located in code cell no. 11.
 Here's an example of my output for this step:
 
 ![alt text][combined_binary_testimage2]
@@ -106,6 +107,10 @@ The code for my perspective transform includes a function called `warp(...)`, wh
 | 200, 720      | 320, 720      |
 | 570, 470      | 320, 0        |
 
+This is the undistorted image with the source points added as points:
+
+![alt text][source_lines_image]
+
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image (see code cell no. 15).
 
 ![alt text][warped_lines_image]
@@ -113,9 +118,10 @@ I verified that my perspective transform was working as expected by drawing the 
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
+To identify the lane pixels, I used a histogram on the lower half of the image using `np.sum(...)`, see testing in code cell no. 17 and actual implementation in the pipeline in function `slide_windows` in code cell no. 18.
 Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
 
-![alt text][image5]
+![alt text][histogram]
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
