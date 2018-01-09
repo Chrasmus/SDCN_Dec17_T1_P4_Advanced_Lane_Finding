@@ -34,7 +34,7 @@ The goals / steps of this project are the following:
 [cal3]: ./output_images/cal_images/calibration3.jpg "Calibration image no.3"
 [dist_testimage2]: ./test_images/test2.jpg "Original, distorted Test image no. 2"
 [undist_testimage2]: ./output_images/cal_images/test2_undistorted.jpg "Undistorted Test image no. 2"
-[combined_binary_testimage2]: ./output_images/test2_combined_thresh.png "Binary Example"
+[combined_binary_testimage2]: ./output_images/test5_yw_combine_thresh.jpg "Binary Example"
 [source_lines_image]: ./output_images/straight_lines1_undistorted.jpg "Undistorted image with Source points"
 [warped_lines_image]: ./output_images/straight_lines1_warped.jpg "Warp Example"
 [histogram]: ./output_images/test3_histogram.png "Histogram"
@@ -52,7 +52,7 @@ The goals / steps of this project are the following:
 
 #### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
 
-This markdown file is the writeup.
+This markdown file is the writeup. This is the second submission, since I had published the annotated video using the original images, not the undisturbed. This error has been fixed in this edition.
 
 The code referenced here can be found in the Jupyter Notebook `Advanced_Lane_Lines.ipynb`.
 
@@ -68,7 +68,7 @@ I start by preparing "object points", which will be the (x, y, z) coordinates of
 I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function. the code for these operations is located in code cells no. 5 and 6.
 
 The reprojection_error is calculated : 0.154.
-The code for this calculation originates from the [opencv docs](https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_calib3d/py_calibration/py_calibration.html).
+The code (code cell no. 4) for this calculation originates from the [opencv docs](https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_calib3d/py_calibration/py_calibration.html).
 
 This is an example of the resulting image:
 
@@ -91,7 +91,7 @@ This is demonstrated in code cell no. 8, and the undistorted image ends up looki
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image, where I use the S-channel from a HLS version of the image, combined with a Sobel gradient threshold in the x direction in order to accentuate lines away from horizontal. The code is located in code cell no. 11.
+I first tried a combination of color and gradient thresholds to generate a binary image, where I use the S-channel from a HLS version of the image, combined with a Sobel gradient threshold in the x direction in order to accentuate lines away from horizontal. The code is located in code cell no. 11. The first reviewer of the project suggested, that a simple combination of thresholded white and yellow would be sufficient. I have used the approach in this submission. This code can be found in code cell no. 14.
 Here's an example of my output for this step on an original, distorted image:
 
 ![alt text][combined_binary_testimage2]
@@ -99,7 +99,7 @@ Here's an example of my output for this step on an original, distorted image:
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `warp(...)`, which appears in code cell no. 14 of the IPython notebook.  The `warp(...)` function takes an image as input. It contains the warping parameters (hardcoded) *source* (`src`) and *destination* (`dst`) points.  I chose the hardcode the source and destination points by eye balling them in a test image (`straight_lines1.jpg`). This resulted in the following source and destination points:
+The code for my perspective transform includes a function called `warp(...)`, which appears in code cell no. 16 of the IPython notebook.  The `warp(...)` function takes an image as input. It contains the warping parameters (hardcoded) *source* (`src`) and *destination* (`dst`) points.  I chose the hardcode the source and destination points by eye balling them in a test image (`straight_lines1.jpg`). This resulted in the following source and destination points:
 
 | Source        | Destination   |
 |:-------------:|:-------------:|
@@ -119,7 +119,7 @@ I verified that my perspective transform was working as expected by drawing the 
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-To identify the lane pixels, I used a histogram on the lower half of the image using `np.sum(...)`, see testing in code cell no. 17 and actual implementation in the pipeline in my function `slide_windows(...)` in code cell no. 18. The lanes are where the two spikes are.
+To identify the lane pixels, I used a histogram on the lower half of the image using `np.sum(...)`, see testing in code cell no. 19 and actual implementation in the pipeline in my function `slide_windows(...)` in code cell no. 21. The lanes are where the two spikes are located.
 
 ![alt text][histogram]
 
@@ -127,8 +127,8 @@ By using a `Sliding window` approach, where I identified all the 'white' pixels 
 
 ![alt text][polynomials]
 
-If the results from the previous frame are good, then the data are reused to calculate the polynomials in the next frame. The function `skip_sliding(...)` in code cell no. 18 is used for this purpose.
-The switch between using `slide_windows(...)` and `skip_sliding(...)` takes place in the central function `process_one_image(...)` in code cell no. 28, where the purpose is to recalculate the lines, if the previous result are bad. I use a `Class Line()` to hold different parameters for each of the two lines, as this is far easier to handle than using an `global vars` approach (see code cell no. 25).
+If the results from the previous frame are good, then the data are reused to calculate the polynomials in the next frame. The function `skip_sliding(...)` in code cell no. 21 is used for this purpose.
+The switch between using `slide_windows(...)` and `skip_sliding(...)` takes place in the central function `process_one_image(...)` in code cell no. 28, where the purpose is to recalculate the lines, if the previous result are bad. I use a `Class Line()` to hold different parameters for each of the two lines, as this is far easier to handle than using an `global vars` approach (see code cell no. 20).
 
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
@@ -138,7 +138,7 @@ The assumption used about x and y are:
 * ym_per_pix = 3/140     # meters per pixel in y dimension
 * xm_per_pix = 3.7/650   # meters per pixel in x dimension
 
-The curvature is calculated in the function `curvature(...)` in code cell no. 18.
+The curvature is calculated in the function `curvature(...)` in code cell no. 21.
 The position relative to the center of the lane is calculated in line 22-26 in the function `process_one_image(...)` (see code cell no. 28).
 
 
@@ -157,7 +157,7 @@ Here is an example of my result on a test image (using test image no. 3):
 
 The code that creates the video with the imposed lanes and information about curvature and position regarding the center of the lane, can be found in code cell no. 31, at the end of the Jupyter Notebook. The pipeline is based on the function `process_one_image(...)` in code cell no. 28.
 
-Here's a [link to my video result](./output_images/project_video_w_lanes.mp4)
+Here's a [link to my video result](./output_images/project_video_w_lanes_yw.mp4)
 
 ---
 
