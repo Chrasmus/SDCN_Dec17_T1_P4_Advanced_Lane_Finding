@@ -40,7 +40,7 @@ The goals / steps of this project are the following:
 [histogram]: ./output_images/test3_histogram.png "Histogram"
 [polynomials]: ./output_images/sliding_windows_test3.png "Output"
 [with_lane]: ./output_images/test3_w_lane.png "Output"
-[video1]: ./output_images/project_video_w_lanes.mp4 "Video"
+[video1]: ./output_images/project_video_w_lanes_yw.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
